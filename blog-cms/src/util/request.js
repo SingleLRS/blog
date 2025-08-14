@@ -4,7 +4,7 @@ import 'nprogress/nprogress.css'
 import {Message} from 'element-ui'
 
 const request = axios.create({
-	baseURL: 'https://api.liuruis.top/blog/admin/',
+	baseURL: 'https://api.liuruis.cn/blog/admin/',
 	timeout: 5000
 })
 

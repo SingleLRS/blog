@@ -23,9 +23,9 @@ Spring Boot + Vue「前后端分离，人不分离」博客系统
 
 预览地址：
 
-前台：[https://liuruis.top](https://liuruis.top)
+前台：[https://liuruis.cn](https://liuruis.cn)
 
-后台：[https://admin.liuruis.top](https://admin.liuruis.top)
+后台：[https://admin.liuruis.cn](https://admin.liuruis.cn)
 
 
 
