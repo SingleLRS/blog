@@ -8,11 +8,16 @@ import './assets/css/base.css'
 import './assets/css/icon/iconfont.css'
 //typo.css
 import "./assets/css/typo.css";
+//系统字体栈覆盖
+import './assets/css/font-stack.css'
 //semantic-ui
 import 'semantic-ui-css/semantic.min.css'
 //element-ui
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+//APlayer（供 Meting 使用）
+import 'aplayer/dist/APlayer.min.css'
+import APlayer from 'aplayer'
 //moment
 import './util/dateTimeFormatUtils.js'
 //v-viewer
@@ -71,6 +76,11 @@ Vue.prototype.scrollToTop = function () {
 
 
 Vue.config.productionTip = false
+
+// 将 APlayer 暴露为全局，供 public/lib/js/Meting.min.js 使用
+if (typeof window !== 'undefined') {
+    window.APlayer = APlayer
+}
 
 new Vue({
 	router,
