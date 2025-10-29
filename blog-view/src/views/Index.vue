@@ -33,6 +33,8 @@
 			</div>
 		</div>
 
+
+
 		<!--私密文章密码对话框-->
 		<BlogPasswordDialog/>
 
@@ -104,6 +106,7 @@
 			}
 		},
 		methods: {
+
 			getSite() {
 				getSite().then(res => {
 					if (res.code === 200) {

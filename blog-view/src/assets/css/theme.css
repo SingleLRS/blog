@@ -1,0 +1,188 @@
+/* 全局明/暗主题覆盖：尽量不影响首页首屏三图，仅调整内容区与常见容器 */
+
+.theme-dark body {
+	background-color: #0f1115;
+	color: #e5e7eb;
+}
+
+.theme-dark .main {
+	background-color: #0f1115;
+}
+
+/* 常见容器与分段 */
+.theme-dark .ui.segment,
+.theme-dark .ui.message,
+.theme-dark .ui.menu,
+.theme-dark .ui.card,
+.theme-dark .el-card,
+.theme-dark .el-message,
+.theme-dark .el-message-box,
+.theme-dark .el-dialog {
+	background-color: #151821 !important;
+	color: #e5e7eb !important;
+}
+
+.theme-dark .ui.segment,
+.theme-dark .ui.message,
+.theme-dark .ui.card,
+.theme-dark .el-card {
+	border-color: #2a2f3a !important;
+}
+
+/* 文本色与链接 */
+.theme-dark a { color: #60a5fa; }
+.theme-dark a:hover { color: #93c5fd; }
+
+/* 表单输入基础 */
+.theme-dark .el-input__inner,
+.theme-dark .el-textarea__inner {
+	background-color: #0f1115;
+	border-color: #2a2f3a;
+	color: #e5e7eb;
+}
+
+.theme-dark .el-input__inner::placeholder,
+.theme-dark .el-textarea__inner::placeholder {
+	color: #9aa2b1;
+}
+
+/* 分割线 */
+.theme-dark .el-divider { border-color: #2a2f3a; }
+
+/* 自定义黑色文字类在暗色下统一改为浅色，提高可读性 */
+.theme-dark .m-common-black,
+.theme-dark .m-black {
+	color: #e5e7eb !important;
+}
+
+/* 列表、标题等常用文字在暗色下的对比度 */
+.theme-dark .ui.list .item,
+.theme-dark .ui.link.list .item,
+.theme-dark .ui.header,
+.theme-dark .ui.breadcrumb,
+.theme-dark .ui.menu .item,
+.theme-dark .ui.table,
+.theme-dark .ui.comments .comment .text {
+	color: #e5e7eb !important;
+}
+
+/* 标签与丝带在暗色下边框与文字对比 */
+.theme-dark .ui.label,
+.theme-dark .ui.tag.label,
+.theme-dark .ui.ribbon.label {
+	color: #e5e7eb !important;
+	border-color: #2a2f3a !important;
+}
+
+/* ---------------- Markdown (.typo) 暗色适配 ---------------- */
+.theme-dark .typo { color: #e5e7eb; }
+
+.theme-dark .typo a { color: #34d399; }
+.theme-dark .typo a:hover { color: #6ee7b7; }
+.theme-dark .typo a::before { background-color: #34d399; }
+
+.theme-dark .typo h1,
+.theme-dark .typo h2,
+.theme-dark .typo h3 { border-bottom-color: #374151; }
+.theme-dark .typo h6 { color: #9ca3af; }
+
+.theme-dark .typo small,
+.theme-dark .typo figcaption { color: #9ca3af; }
+
+.theme-dark .typo blockquote {
+	color: #9ca3af;
+	border-left-color: #42b983; /* 保持主题色 */
+}
+
+/* 行内代码在暗色下的对比度 */
+.theme-dark .typo p code,
+.theme-dark .typo ul code,
+.theme-dark .typo ol code {
+	color: #fbbf24;
+	background: #1f2937;
+	border-color: #374151;
+}
+
+.theme-dark .typo hr { border-bottom-color: #374151; }
+
+/* 表格暗色对比度 */
+.theme-dark .typo table th,
+.theme-dark .typo table td,
+.theme-dark .typo table caption {
+	color: #d1d5db;
+	border-color: #374151;
+}
+.theme-dark .typo table th { background: #151821; }
+.theme-dark .typo table thead th { background: #151821; }
+
+/* ---------------- Introduction 卡片与折叠面板 ---------------- */
+.theme-dark .ui.card,
+.theme-dark .ui.card > .content,
+.theme-dark .ui.card > .extra.content {
+	background-color: #151821 !important;
+	color: #e5e7eb !important;
+	border-color: #2a2f3a !important;
+}
+
+.theme-dark .ui.card .header { color: #e5e7eb !important; }
+
+.theme-dark .ui.circular.icon.button {
+	background-color: #1f2937 !important;
+	color: #e5e7eb !important;
+	border: 1px solid #2a2f3a !important;
+}
+.theme-dark .ui.circular.icon.button:hover { background-color: #374151 !important; }
+
+/* 去除 Introduction 外围白边（segments 自带边框/阴影） */
+.theme-dark .ui.segments {
+	background-color: #151821 !important;
+	border: 1px solid #2a2f3a !important;
+	box-shadow: none !important;
+}
+.theme-dark .ui.segments > .segment {
+	background-color: #151821 !important;
+	border-color: #2a2f3a !important;
+}
+.theme-dark .ui.card { box-shadow: none !important; }
+
+/* element collapse */
+.theme-dark .el-collapse,
+.theme-dark .el-collapse-item__wrap {
+	background-color: #151821 !important;
+	border-color: #2a2f3a !important;
+}
+.theme-dark .el-collapse-item__header {
+	background-color: #151821 !important;
+	color: #e5e7eb !important;
+	border-bottom-color: #2a2f3a !important;
+}
+.theme-dark .el-collapse-item__content { color: #e5e7eb !important; }
+
+/* ---------------- “阅读全文”按钮在暗色下的可读性 ---------------- */
+.theme-dark .color-btn {
+	color: #ffffff !important; /* 保持纯白文字，不被 .theme-dark a 覆盖 */
+	text-shadow: 0 1px 2px rgba(0,0,0,.6);
+}
+
+/* ---------------- Prism 代码块暗色适配 ---------------- */
+.theme-dark pre[class*="language-"],
+.theme-dark .typo pre {
+	background: #1f2937 !important; /* slate-800 */
+	border: 0 !important;
+	box-shadow: none !important;
+}
+
+/* 行号插件右侧分隔线变暗 */
+.theme-dark .line-numbers .line-numbers-rows {
+	border-right: 1px solid #374151 !important; /* slate-700 */
+}
+
+/* 代码工具栏在暗色下的可读性 */
+.theme-dark div.code-toolbar > .toolbar > .toolbar-item > a,
+.theme-dark div.code-toolbar > .toolbar > .toolbar-item > button,
+.theme-dark div.code-toolbar > .toolbar > .toolbar-item > span {
+	color: #e5e7eb !important;
+	background: rgba(55, 65, 81, 0.6) !important; /* slate-700 */
+}
+
+

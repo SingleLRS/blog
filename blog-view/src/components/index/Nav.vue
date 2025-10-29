@@ -36,6 +36,12 @@
 					<span class="content">{{ item.content }}</span>
 				</template>
 			</el-autocomplete>
+			<!-- 主题切换：右上角按钮，仅桌面端显示 -->
+			<el-tooltip :content="isDark ? '切换为明亮模式' : '切换为暗黑模式'" placement="bottom">
+				<a class="right item m-mobile-hide m-theme-toggle" @click.prevent="toggleTheme">
+					<i :class="isDark ? 'sun outline icon' : 'moon icon'"></i>
+				</a>
+			</el-tooltip>
 			<button class="ui menu black icon button m-right-top m-mobile-show" @click="toggle">
 				<i class="sidebar icon"></i>
 			</button>
@@ -64,7 +70,8 @@
 				mobileHide: true,
 				queryString: '',
 				queryResult: [],
-				timer: null
+				timer: null,
+				isDark: false
 			}
 		},
 		computed: {
@@ -77,6 +84,9 @@
 			}
 		},
 		mounted() {
+			// 初始化主题状态（与 main.js 预设保持一致）
+			const theme = window.localStorage.getItem('nblog.theme')
+			this.isDark = theme === 'dark'
 			//监听页面滚动位置，改变导航栏的显示
 			window.addEventListener('scroll', () => {
 				//首页且不是移动端
@@ -101,6 +111,16 @@
 		methods: {
 			toggle() {
 				this.mobileHide = !this.mobileHide
+			},
+			toggleTheme() {
+				this.isDark = !this.isDark
+				window.localStorage.setItem('nblog.theme', this.isDark ? 'dark' : 'light')
+				const root = document.documentElement
+				if (this.isDark) {
+					root.classList.add('theme-dark')
+				} else {
+					root.classList.remove('theme-dark')
+				}
 			},
 			categoryRoute(name) {
 				this.$router.push(`/category/${name}`)
@@ -231,5 +251,10 @@
 		text-overflow: ellipsis;
 		font-size: 12px;
 		color: rgba(0, 0, 0, .70);
+	}
+
+	/* 顶栏主题切换图标尺寸与对齐 */
+	.m-theme-toggle i {
+		font-size: 16px !important;
 	}
 </style>

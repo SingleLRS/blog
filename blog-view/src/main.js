@@ -10,6 +10,8 @@ import './assets/css/icon/iconfont.css'
 import "./assets/css/typo.css";
 //系统字体栈覆盖
 import './assets/css/font-stack.css'
+//主题（明/暗）覆盖
+import './assets/css/theme.css'
 //semantic-ui
 import 'semantic-ui-css/semantic.min.css'
 //element-ui
@@ -76,6 +78,16 @@ Vue.prototype.scrollToTop = function () {
 
 
 Vue.config.productionTip = false
+
+// 首屏前根据本地缓存预设主题，保证切回明亮模式完全还原
+try {
+  const savedTheme = window.localStorage.getItem('nblog.theme')
+  if (savedTheme === 'dark') {
+    document.documentElement.classList.add('theme-dark')
+  } else {
+    document.documentElement.classList.remove('theme-dark')
+  }
+} catch (e) {}
 
 // 将 APlayer 暴露为全局，供 public/lib/js/Meting.min.js 使用
 if (typeof window !== 'undefined') {
