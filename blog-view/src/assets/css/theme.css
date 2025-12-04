@@ -185,4 +185,106 @@
 	background: rgba(55, 65, 81, 0.6) !important; /* slate-700 */
 }
 
+/* ---------------- 评论表单暗色适配 ---------------- */
+.theme-dark .form {
+	background: #151821 !important;
+}
+
+.theme-dark .form h3 {
+	color: #e5e7eb !important;
+}
+
+.theme-dark .el-form textarea,
+.theme-dark .el-form input {
+	color: #e5e7eb !important;
+}
+
+.theme-dark .el-form .el-form-item__label {
+	color: #e5e7eb !important;
+}
+
+/* 评论表单输入框暗色适配 - 更高优先级 */
+.theme-dark .form .el-input__inner,
+.theme-dark .form .el-textarea__inner {
+	background-color: #0f1115 !important;
+	border-color: #2a2f3a !important;
+	color: #e5e7eb !important;
+}
+
+.theme-dark .form .el-input__inner::placeholder,
+.theme-dark .form .el-textarea__inner::placeholder {
+	color: #6b7280 !important;
+}
+
+/* 输入框前缀图标暗色适配 */
+.theme-dark .form .el-input__icon {
+	color: #9aa2b1 !important;
+}
+
+/* 字数统计暗色适配 */
+.theme-dark .form .el-input__count,
+.theme-dark .form .el-input__count-inner {
+	background: transparent !important;
+	color: #6b7280 !important;
+}
+
+/* 表情选择器暗色适配 */
+.theme-dark .emoji-box {
+	background: #151821 !important;
+	border-color: #2a2f3a !important;
+	box-shadow: 0 11px 12px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+.theme-dark .emoji-box .emoji-title {
+	color: #9aa2b1 !important;
+}
+
+.theme-dark .emoji-box .emoji-wrap .emoji-list:hover {
+	background-color: #2a2f3a !important;
+}
+
+.theme-dark .emoji-box .emoji-tabs {
+	background-color: #0f1115 !important;
+}
+
+.theme-dark .emoji-box .emoji-tabs .tab-link.on {
+	background-color: #151821 !important;
+}
+
+.theme-dark .emoji-box .emoji-tabs .tab-link:hover {
+	background: #2a2f3a !important;
+}
+
+/* ---------------- 导航栏搜索框暗色适配 ---------------- */
+.theme-dark .m-search .el-input__inner {
+	background-color: transparent !important;
+	border-color: transparent !important;
+	color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.theme-dark .m-search .el-input__inner::placeholder {
+	color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 搜索下拉框暗色适配 */
+.theme-dark .m-search-item {
+	background-color: #151821 !important;
+	border-color: #2a2f3a !important;
+}
+
+.theme-dark .m-search-item li {
+	color: #e5e7eb !important;
+}
+
+.theme-dark .m-search-item li:hover {
+	background-color: #2a2f3a !important;
+}
+
+.theme-dark .m-search-item li .title {
+	color: #e5e7eb !important;
+}
+
+.theme-dark .m-search-item li .content {
+	color: #9aa2b1 !important;
+}
 
