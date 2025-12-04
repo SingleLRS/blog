@@ -1,5 +1,5 @@
 <p align="center">
-	<a href="https://naccl.top/" target="_blank">
+	<a href="https://liuruis.cn/" target="_blank">
 		<img src="./pic/NBlog.png" alt="NBlog logo" style="width: 200px; height: 200px">
 	</a>
 </p>
@@ -9,7 +9,6 @@
 	<img src="https://img.shields.io/badge/MyBatis-3.5.5-red">
 	<img src="https://img.shields.io/badge/Vue-2.6.11-brightgreen">
 	<img src="https://img.shields.io/badge/license-MIT-blue">
-	<img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FNaccl%2FNBlog&count_bg=%2344CC11&title_bg=%23555555&icon=notist.svg&icon_color=%231296DB&title=hits&edge_flat=false">
 </p>
 
 
@@ -75,24 +74,6 @@ UI 框架为 [Element UI](https://github.com/ElemeFE/element)
 [Element UI](https://github.com/ElemeFE/element)：部分使用，一些小组件，弥补了 Semantic UI 的不足，便于快速实现效果
 
 文章排版：基于 [typo.css](https://github.com/sofish/typo.css) 修改
-
-
-
-## Telegram Bot 快捷操作
-
-| 桌面                                                         | Phone                                                        | Phone                                                        |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![桌面客户端效果图](./pic/TelegramBot.png "桌面客户端效果图") | ![手机客户端效果图1](./pic/TgBotPhone1.png "手机客户端效果图1") | ![手机客户端效果图2](./pic/TgBotPhone2.png "手机客户端效果图2") |
-
-若要启用该功能，参考以下步骤：
-
-1. 向 @BotFather 申请一个 Bot，得到该 Bot 的`token`，格式如`1234567890:qwertyuiopasdfghjklzxcvbnm`
-2. 与该 Bot 私聊，随便发个消息，然后打开此链接`https://api.telegram.org/bot<botToken>/getUpdates`（替换链接中的 token），在`result -> message -> chat -> id`得到`chatId`
-3. 将获取的`token`和`chatId`填入`application-dev.properties`，并启用`comment.notify.channel=tg`
-4. 由于目前仅提供 webhook 的方式获取消息更新，所以`application-dev.properties`中的`blog.api`需要填写后端 API 的地址，并且**必须是`https`(Telegram 的要求)**，也就是说如果你没有公网 IP 或内网穿透或反向代理，那么在本地环境是无法测试的，建议直接扔服务器上
-5. 国内通常情况下无法访问 TG 的 API，因此提供了两种方式
-   1. 正向代理：配置`http.proxy.server`，通过你的代理发送请求
-   2. 反向代理：可以直接使用我跑在 Cloudflare Workers 上的反代，默认配置即可。示例代码已放在`blog-api/cfworker-tg-api-open.js`，可自行搭建（**22.05.12 更新，近两天大陆绝大多数地区 `*.workers.dev` 域名已被墙，因此若仍想使用此反代方式访问 cf worker，需要将 Worker 绑定路由至自己的域名，详见[相关讨论](https://github.com/XIU2/CloudflareSpeedTest/issues/205)**）
 
 
 
