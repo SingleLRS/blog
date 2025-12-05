@@ -1,5 +1,7 @@
 <template>
 	<div class="site">
+		<!--阅读进度条-->
+		<div class="reading-progress-bar" :style="{width: readingProgress + '%'}"></div>
 		<!--顶部导航-->
 		<Nav :blogName="siteInfo.blogName" :categoryList="categoryList"/>
 		<!--首页大图 只在首页且pc端时显示-->
@@ -81,6 +83,7 @@
 				badges: [],
 				newBlogList: [],
 				hitokoto: {},
+				readingProgress: 0,
 			}
 		},
 		computed: {
@@ -104,6 +107,11 @@
 			window.onresize = () => {
 				this.$store.commit(SAVE_CLIENT_SIZE, {clientHeight: document.body.clientHeight, clientWidth: document.body.clientWidth})
 			}
+			//监听滚动事件，更新阅读进度
+			window.addEventListener('scroll', this.updateReadingProgress)
+		},
+		beforeDestroy() {
+			window.removeEventListener('scroll', this.updateReadingProgress)
 		},
 		methods: {
 
@@ -127,6 +135,12 @@
 				getHitokoto().then(res => {
 					this.hitokoto = res
 				})
+			},
+			//更新阅读进度
+			updateReadingProgress() {
+				const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+				const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight
+				this.readingProgress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0
 			}
 		}
 	}

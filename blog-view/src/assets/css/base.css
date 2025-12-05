@@ -452,3 +452,193 @@ footer {
     width: 25px;
     vertical-align: bottom;
 }
+
+/* ==================== 1. 阅读进度条 ==================== */
+.reading-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    z-index: 99999;
+    transition: width 0.1s ease-out;
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+    overflow: hidden; /* 限制脉冲效果在进度条内 */
+}
+
+.reading-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    animation: progressShine 1.5s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
+}
+
+/* ==================== 2. 返回顶部按钮美化 ==================== */
+.el-backtop {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+    border-radius: 50% !important;
+    width: 56px !important;
+    height: 56px !important;
+    padding: 8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.el-backtop:hover {
+    transform: translateY(-5px) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6) !important;
+}
+
+.el-backtop img {
+    width: 32px !important;
+    height: 32px !important;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)) brightness(1.1);
+    transition: transform 0.3s ease;
+}
+
+.el-backtop:hover img {
+    animation: fly 0.6s ease infinite alternate;
+}
+
+@keyframes fly {
+    0% { transform: translateY(0) rotate(-5deg); }
+    100% { transform: translateY(-4px) rotate(5deg); }
+}
+
+/* ==================== 4. 引用块(blockquote)美化 ==================== */
+.typo blockquote {
+    position: relative;
+    margin: 1.5em 0 !important;
+    padding: 1.2em 1.5em 1.2em 2em !important;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-left: 4px solid #42b983 !important;
+    border-radius: 0 12px 12px 0;
+    color: #64748b !important;
+    font-style: italic;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.typo blockquote:hover {
+    transform: translateX(5px);
+    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.typo blockquote::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    font-size: 4em;
+    color: #42b983;
+    opacity: 0.2;
+    font-family: Georgia, serif;
+    line-height: 1;
+}
+
+.typo blockquote p {
+    margin: 0 !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* ==================== 5. 图片悬停效果 ==================== */
+.typo img {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.typo img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* ==================== 7. 代码块行号美化 ==================== */
+.line-numbers .line-numbers-rows {
+    border-right: 2px solid rgba(99, 102, 241, 0.3) !important;
+    padding-right: 10px !important;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.line-numbers .line-numbers-rows > span::before {
+    color: #8b949e !important;
+    font-size: 13px !important;
+    font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* ==================== 8. 页面切换动画 ==================== */
+.page-enter-active,
+.page-leave-active {
+    transition: all 0.3s ease;
+}
+
+.page-enter-from {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.page-leave-to {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+/* 淡入淡出效果 */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+/* ==================== 目录(TOC)高亮优化 ==================== */
+.m-toc .is-active-link {
+    position: relative;
+    font-weight: 700 !important;
+    color: #667eea !important;
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.1), transparent);
+    border-radius: 4px;
+    padding-left: 8px !important;
+    margin-left: -8px;
+}
+
+.m-toc .is-active-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 70%;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+.m-toc .toc-link {
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    padding: 6px 8px !important;
+    margin: 2px 0;
+    display: block !important;
+}
+
+.m-toc .toc-link:hover {
+    background: rgba(102, 126, 234, 0.08);
+    color: #667eea !important;
+    transform: translateX(3px);
+}
