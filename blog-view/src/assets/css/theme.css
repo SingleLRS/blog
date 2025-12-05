@@ -106,14 +106,36 @@
 .theme-dark .typo hr { border-bottom-color: #374151; }
 
 /* 表格暗色对比度 */
+.theme-dark .typo table {
+	background: #1a1d24 !important;
+	border-color: #374151 !important;
+}
+
 .theme-dark .typo table th,
 .theme-dark .typo table td,
 .theme-dark .typo table caption {
-	color: #d1d5db;
-	border-color: #374151;
+	color: #d1d5db !important;
+	border-color: #374151 !important;
+	background: #1a1d24 !important;
 }
-.theme-dark .typo table th { background: #151821; }
-.theme-dark .typo table thead th { background: #151821; }
+
+.theme-dark .typo table th,
+.theme-dark .typo table thead th {
+	background: #151821 !important;
+	color: #e5e7eb !important;
+}
+
+.theme-dark .typo table tbody tr:nth-child(odd) td {
+	background: #1a1d24 !important;
+}
+
+.theme-dark .typo table tbody tr:nth-child(even) td {
+	background: #1f2328 !important;
+}
+
+.theme-dark .typo table tbody tr:hover td {
+	background: #2a2f3a !important;
+}
 
 /* ---------------- Introduction 卡片与折叠面板 ---------------- */
 .theme-dark .ui.card,
@@ -177,12 +199,44 @@
 	border-right: 1px solid #374151 !important; /* slate-700 */
 }
 
-/* 代码工具栏在暗色下的可读性 */
+/* 代码工具栏在暗色下的可读性 - 复制按钮美化 */
 .theme-dark div.code-toolbar > .toolbar > .toolbar-item > a,
 .theme-dark div.code-toolbar > .toolbar > .toolbar-item > button,
 .theme-dark div.code-toolbar > .toolbar > .toolbar-item > span {
-	color: #e5e7eb !important;
-	background: rgba(55, 65, 81, 0.6) !important; /* slate-700 */
+	color: #f3f4f6 !important;
+	background: linear-gradient(135deg, rgba(79, 70, 229, 0.85), rgba(124, 58, 237, 0.85)) !important;
+	border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	box-shadow: 
+		0 4px 6px -1px rgba(0, 0, 0, 0.4),
+		0 2px 4px -1px rgba(0, 0, 0, 0.3),
+		inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.theme-dark div.code-toolbar > .toolbar > .toolbar-item > button:hover,
+.theme-dark div.code-toolbar > .toolbar > .toolbar-item > span:hover {
+	background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95)) !important;
+	box-shadow: 
+		0 8px 15px -3px rgba(79, 70, 229, 0.5),
+		0 4px 6px -2px rgba(124, 58, 237, 0.4),
+		inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+/* 暗色模式下复制成功状态 */
+.theme-dark div.code-toolbar > .toolbar > .toolbar-item > span[data-copy-state="copy-success"],
+.theme-dark div.code-toolbar > .toolbar > .toolbar-item > button[data-copy-state="copy-success"] {
+	background: linear-gradient(135deg, rgba(5, 150, 105, 0.9), rgba(4, 120, 87, 0.9)) !important;
+	box-shadow: 
+		0 4px 6px -1px rgba(5, 150, 105, 0.5),
+		0 2px 4px -1px rgba(4, 120, 87, 0.4),
+		inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 暗色模式下语言标签样式 */
+.theme-dark div.code-toolbar > .toolbar > .toolbar-item:first-child > span:not(.copy-to-clipboard-button):not([data-copy-state]) {
+	background: rgba(17, 24, 39, 0.9) !important;
+	color: #9ca3af !important;
+	border: 1px solid rgba(55, 65, 81, 0.6) !important;
+	box-shadow: none !important;
 }
 
 /* ---------------- 评论表单暗色适配 ---------------- */

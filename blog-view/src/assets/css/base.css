@@ -42,13 +42,132 @@ body::-webkit-scrollbar-track-piece {
     background: transparent;
 }
 
-.copy-to-clipboard-button {
-    background: inherit !important;
-    box-shadow: none !important;
+/* ==================== 代码块复制按钮美化 ==================== */
+div.code-toolbar > .toolbar {
+    top: 0.5em !important;
+    right: 0.5em !important;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(-5px);
 }
 
-.copy-to-clipboard-button span {
-    background: rgb(239 239 239 / 31%) !important;
+div.code-toolbar:hover > .toolbar {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > button,
+div.code-toolbar > .toolbar > .toolbar-item > span {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 14px !important;
+    font-size: 12px !important;
+    font-weight: 500;
+    color: #e5e7eb !important;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(139, 92, 246, 0.8)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.3),
+        0 2px 4px -1px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+/* 复制按钮悬停效果 */
+div.code-toolbar > .toolbar > .toolbar-item > button:hover,
+div.code-toolbar > .toolbar > .toolbar-item > span:hover {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, rgba(129, 140, 248, 0.95), rgba(167, 139, 250, 0.95)) !important;
+    transform: translateY(-2px);
+    box-shadow: 
+        0 8px 15px -3px rgba(99, 102, 241, 0.4),
+        0 4px 6px -2px rgba(139, 92, 246, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 复制按钮点击效果 */
+div.code-toolbar > .toolbar > .toolbar-item > button:active,
+div.code-toolbar > .toolbar > .toolbar-item > span:active {
+    transform: translateY(0) scale(0.95);
+    box-shadow: 
+        0 2px 4px -1px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 复制按钮图标动画（使用伪元素模拟图标） */
+div.code-toolbar > .toolbar > .toolbar-item > button::before,
+div.code-toolbar > .toolbar > .toolbar-item > span::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease;
+    pointer-events: none;
+}
+
+div.code-toolbar > .toolbar > .toolbar-item > button:active::before,
+div.code-toolbar > .toolbar > .toolbar-item > span:active::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* 复制成功状态 - 绿色渐变 */
+div.code-toolbar > .toolbar > .toolbar-item > span[data-copy-state="copy-success"],
+div.code-toolbar > .toolbar > .toolbar-item > button[data-copy-state="copy-success"] {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9)) !important;
+    box-shadow: 
+        0 4px 6px -1px rgba(16, 185, 129, 0.4),
+        0 2px 4px -1px rgba(5, 150, 105, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    animation: copySuccess 0.4s ease;
+}
+
+@keyframes copySuccess {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+/* 工具栏整体样式增强 */
+div.code-toolbar > .toolbar > .toolbar-item {
+    margin-left: 6px;
+}
+
+/* 语言标签样式（如果有的话） */
+div.code-toolbar > .toolbar > .toolbar-item:first-child > span:not(.copy-to-clipboard-button):not([data-copy-state]) {
+    background: rgba(30, 41, 59, 0.8) !important;
+    color: #94a3b8 !important;
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    border: 1px solid rgba(71, 85, 105, 0.5) !important;
+}
+
+/* 代码块容器圆角优化 */
+pre[class*="language-"] {
+    border-radius: 12px !important;
+    margin: 1em 0 !important;
+}
+
+/* 响应式处理 */
+@media (max-width: 768px) {
+    div.code-toolbar > .toolbar > .toolbar-item > button,
+    div.code-toolbar > .toolbar > .toolbar-item > span {
+        padding: 6px 10px !important;
+        font-size: 11px !important;
+    }
 }
 
 input::-webkit-outer-spin-button,
