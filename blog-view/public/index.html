@@ -6,6 +6,17 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<link rel="icon" href="<%= BASE_URL %>favicon.ico">
 	<title>NBlog</title>
+	<!-- SEO Meta Tags -->
+	<meta name="description" content="Liuruis's Blog - 技术博客，分享编程学习笔记、Spring、Java、数据库等技术文章">
+	<meta name="keywords" content="博客,技术博客,编程,Java,Spring,PostgreSQL,学习笔记">
+	<meta name="author" content="liuruis">
+	<meta name="robots" content="index, follow">
+	<!-- 百度SEO验证 -->
+	<meta name="baidu-site-verification" content="codeva-FJ8p8qs5L9">
+	<!-- Open Graph / 社交分享 -->
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="Liuruis's Blog">
+	<meta property="og:locale" content="zh_CN">
     <link rel="stylesheet" href="<%= BASE_URL %>lib/css/prism.css">
 </head>
 <body>
@@ -18,5 +29,19 @@
 		var meting_api='https://api.naccl.top/meting/api?server=:server&type=:type&id=:id&auth=:auth&r=:r';
     </script>
 	<script src="<%= BASE_URL %>lib/js/Meting.min.js"></script>
+	<!-- 百度自动推送 - 每次访问自动通知百度收录 -->
+	<script>
+		(function(){
+			var bp = document.createElement('script');
+			var curProtocol = window.location.protocol.split(':')[0];
+			if (curProtocol === 'https') {
+				bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+			} else {
+				bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+			}
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(bp, s);
+		})();
+	</script>
 </body>
 </html>
