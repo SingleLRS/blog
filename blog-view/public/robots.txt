@@ -1,0 +1,11 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# 禁止爬取的路径
+Disallow: /admin
+Disallow: /api
+
+# 站点地图
+Sitemap: https://liuruis.cn/sitemap.xml
+
