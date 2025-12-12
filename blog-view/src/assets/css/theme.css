@@ -239,6 +239,29 @@
 	box-shadow: none !important;
 }
 
+/* ---------------- 评论列表昵称暗色适配 ---------------- */
+.theme-dark .ui.comments .comment .nickname {
+	color: #60a5fa !important;
+}
+
+.theme-dark .ui.comments .comment .nickname:hover {
+	color: #93c5fd !important;
+}
+
+/* 评论列表中 @用户 链接的暗色适配 */
+.theme-dark .ui.comments .comment .text a {
+	color: #60a5fa !important;
+}
+
+.theme-dark .ui.comments .comment .text a:hover {
+	color: #93c5fd !important;
+}
+
+/* 评论时间等元数据暗色适配 */
+.theme-dark .ui.comments .comment .metadata {
+	color: #9ca3af !important;
+}
+
 /* ---------------- 评论表单暗色适配 ---------------- */
 .theme-dark .form {
 	background: #151821 !important;
