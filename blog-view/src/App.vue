@@ -16,12 +16,13 @@
 /* 页面切换淡入淡出动画 */
 .fade-enter-active,
 .fade-leave-active {
-	transition: opacity 0.25s ease, transform 0.25s ease;
+	transition: opacity 0.22s ease, transform 0.22s ease;
+	will-change: opacity, transform;
 }
 
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
-	transform: translateY(10px);
+	transform: translateY(6px);
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div class="site">
 		<!--阅读进度条-->
-		<div class="reading-progress-bar" :style="{width: readingProgress + '%'}"></div>
+		<div v-if="showReadingProgress" class="reading-progress-bar" :style="{width: readingProgress + '%'}"></div>
 		<!--顶部导航-->
 		<Nav :blogName="siteInfo.blogName" :categoryList="categoryList"/>
 		<!--首页大图 只在首页且pc端时显示-->
@@ -45,8 +45,8 @@
 			<meting-js :server="siteInfo.playlistServer" :id="siteInfo.playlistId" type="playlist" fixed="true" theme="#25CCF7" v-if="siteInfo.playlistServer && siteInfo.playlistId"></meting-js>
 		</div>
 		<!--回到顶部-->
-		<el-backtop style="box-shadow: none;background: none;z-index: 9999;">
-			<img src="/img/paper-plane.png" style="width: 40px;height: 40px;">
+		<el-backtop :visibility-height="320" class="m-backtop">
+			<img src="/img/paper-plane.png" alt="返回顶部">
 		</el-backtop>
 		<!--底部footer-->
 		<Footer :siteInfo="siteInfo" :badges="badges" :newBlogList="newBlogList" :hitokoto="hitokoto"/>
@@ -87,12 +87,16 @@
 			}
 		},
 		computed: {
-			...mapState(['focusMode'])
+			...mapState(['focusMode']),
+			showReadingProgress() {
+				return this.$route.name === 'blog'
+			}
 		},
 		watch: {
 			//路由改变时，页面滚动至顶部
 			'$route.path'() {
 				this.scrollToTop()
+				this.updateReadingProgress()
 			}
 		},
 		created() {
@@ -109,6 +113,7 @@
 			}
 			//监听滚动事件，更新阅读进度
 			window.addEventListener('scroll', this.updateReadingProgress)
+			this.updateReadingProgress()
 		},
 		beforeDestroy() {
 			window.removeEventListener('scroll', this.updateReadingProgress)
@@ -138,9 +143,22 @@
 			},
 			//更新阅读进度
 			updateReadingProgress() {
-				const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-				const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight
-				this.readingProgress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0
+				if (this.$route.name !== 'blog') {
+					this.readingProgress = 0
+					return
+				}
+				const article = document.querySelector('.js-toc-content')
+				if (!article) {
+					this.readingProgress = 0
+					return
+				}
+				const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
+				const articleTop = article.offsetTop
+				const articleHeight = article.scrollHeight
+				const viewportHeight = document.documentElement.clientHeight
+				const maxScrollable = Math.max(articleHeight - viewportHeight, 1)
+				const progress = ((scrollTop - articleTop) / maxScrollable) * 100
+				this.readingProgress = Math.min(100, Math.max(0, progress))
 			}
 		}
 	}

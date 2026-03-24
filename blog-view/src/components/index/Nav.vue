@@ -71,7 +71,9 @@
 				queryString: '',
 				queryResult: [],
 				timer: null,
-				isDark: false
+				isDark: false,
+				handleSystemThemeChange: null,
+				themeMediaQuery: null
 			}
 		},
 		computed: {
@@ -84,9 +86,25 @@
 			}
 		},
 		mounted() {
-			// 初始化主题状态（与 main.js 预设保持一致）
-			const theme = window.localStorage.getItem('nblog.theme')
-			this.isDark = theme === 'dark'
+			// 初始化主题状态（优先使用站内设置，否则跟随系统主题）
+			const savedTheme = window.localStorage.getItem('nblog.theme')
+			const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+			this.isDark = savedTheme ? savedTheme === 'dark' : prefersDark
+			const mediaQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null
+			if (mediaQuery) {
+				this.handleSystemThemeChange = event => {
+					if (!window.localStorage.getItem('nblog.theme')) {
+						this.isDark = event.matches
+						document.documentElement.classList.toggle('theme-dark', event.matches)
+					}
+				}
+				if (mediaQuery.addEventListener) {
+					mediaQuery.addEventListener('change', this.handleSystemThemeChange)
+				} else if (mediaQuery.addListener) {
+					mediaQuery.addListener(this.handleSystemThemeChange)
+				}
+				this.themeMediaQuery = mediaQuery
+			}
 			//监听页面滚动位置，改变导航栏的显示
 			window.addEventListener('scroll', () => {
 				//首页且不是移动端
@@ -108,6 +126,15 @@
 				}
 			})
 		},
+		beforeDestroy() {
+			if (this.themeMediaQuery && this.handleSystemThemeChange) {
+				if (this.themeMediaQuery.removeEventListener) {
+					this.themeMediaQuery.removeEventListener('change', this.handleSystemThemeChange)
+				} else if (this.themeMediaQuery.removeListener) {
+					this.themeMediaQuery.removeListener(this.handleSystemThemeChange)
+				}
+			}
+		},
 		methods: {
 			toggle() {
 				this.mobileHide = !this.mobileHide
@@ -115,12 +142,7 @@
 			toggleTheme() {
 				this.isDark = !this.isDark
 				window.localStorage.setItem('nblog.theme', this.isDark ? 'dark' : 'light')
-				const root = document.documentElement
-				if (this.isDark) {
-					root.classList.add('theme-dark')
-				} else {
-					root.classList.remove('theme-dark')
-				}
+				document.documentElement.classList.toggle('theme-dark', this.isDark)
 			},
 			categoryRoute(name) {
 				this.$router.push(`/category/${name}`)

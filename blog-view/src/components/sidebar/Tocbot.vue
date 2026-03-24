@@ -36,6 +36,7 @@
 		},
 		methods: {
 			initTocbot() {
+				tocbot.destroy()
 				tocbot.init({
 					// Where to render the table of contents.
 					tocSelector: '.js-toc',
@@ -48,12 +49,13 @@
 					// Smooth scrolling enabled.
 					scrollSmooth: true,
 					// Smooth scroll duration.
-					scrollSmoothDuration: 420,
+					scrollSmoothDuration: 360,
 					//到顶部导航条的距离
-					scrollSmoothOffset: -55,
+					scrollSmoothOffset: -70,
 					// Headings offset between the headings and the top of the document (this is meant for minor adjustments).
 					// Can also be used to account for scroll height discrepancies from the use of css scroll-padding-top
-					headingsOffset: -18
+					headingsOffset: 80,
+					hasInnerContainers: true
 				})
 			}
 		}
@@ -86,8 +88,10 @@
 
 	.m-toc .toc-list li a {
 		display: block;
-		padding: 4px 0;
-		font-weight: 300;
+		padding: 6px 8px;
+		font-weight: 400;
+		border-radius: 6px;
+		transition: color .2s ease, background-color .2s ease, transform .2s ease;
 	}
 
 	.m-toc .toc-list li a:hover {
@@ -111,7 +115,7 @@
 
 	.m-toc.is-position-fixed {
 		position: sticky !important;
-		top: 60px
+		top: 72px
 	}
 
 	.m-toc .is-active-link {

@@ -194,7 +194,7 @@
 	}
 
 	.extra.content .like-color {
-		color: red !important;
+		color: #ff4d6d !important;
 	}
 
 	.extra.content i {

@@ -75,7 +75,7 @@
 				</li>
 				<li>发表时间：{{ blog.createTime | dateFormat('YYYY-MM-DD HH:mm') }}</li>
 				<li>最后修改：{{ blog.updateTime | dateFormat('YYYY-MM-DD HH:mm') }}</li>
-				<li>本站点采用<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank"> 署名 4.0 国际 (CC BY 4.0) </a>创作共享协议。可自由转载、引用，并且允许商业性使用。但需署名作者且注明文章出处。</li>
+				<li>本站点采用<a class="external-link" href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">署名 4.0 国际 (CC BY 4.0)</a>创作共享协议。可自由转载、引用，并且允许商业性使用。但需署名作者且注明文章出处。</li>
 			</ul>
 		</div>
 		<!--评论-->
@@ -156,6 +156,7 @@
 						//v-html渲染完毕后，渲染代码块样式
 						this.$nextTick(() => {
 							Prism.highlightAll()
+							this.decorateExternalLinks()
 							//将文章渲染完成状态置为 true
 							this.$store.commit(SET_IS_BLOG_RENDER_COMPLETE, true)
 						})
@@ -168,6 +169,34 @@
 			},
 			changeFocusMode() {
 				this.$store.commit(SET_FOCUS_MODE, !this.focusMode)
+			},
+			decorateExternalLinks() {
+				const article = this.$el.querySelector('.js-toc-content')
+				if (!article) {
+					return
+				}
+				const currentHost = window.location.host
+				article.querySelectorAll('a[href]').forEach(link => {
+					if (link.classList.contains('router-link-active')) {
+						return
+					}
+					const href = link.getAttribute('href')
+					if (!href || href.startsWith('#') || href.startsWith('/')) {
+						link.classList.remove('external-link')
+						return
+					}
+					try {
+						const url = new URL(href, window.location.origin)
+						const isExternal = url.host && url.host !== currentHost
+						link.classList.toggle('external-link', isExternal)
+						if (isExternal) {
+							link.setAttribute('target', '_blank')
+							link.setAttribute('rel', 'noopener noreferrer')
+						}
+					} catch (e) {
+						link.classList.remove('external-link')
+					}
+				})
 			}
 		}
 	}

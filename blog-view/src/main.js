@@ -79,10 +79,11 @@ Vue.prototype.scrollToTop = function () {
 
 Vue.config.productionTip = false
 
-// 首屏前根据本地缓存预设主题，保证切回明亮模式完全还原
+// 首屏前根据本地缓存或系统主题预设主题，保证首次访问与切回明亮模式都正确
 try {
   const savedTheme = window.localStorage.getItem('nblog.theme')
-  if (savedTheme === 'dark') {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
     document.documentElement.classList.add('theme-dark')
   } else {
     document.documentElement.classList.remove('theme-dark')

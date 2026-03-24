@@ -80,6 +80,14 @@
 .theme-dark .typo a { color: #34d399; }
 .theme-dark .typo a:hover { color: #6ee7b7; }
 .theme-dark .typo a::before { background-color: #34d399; }
+.theme-dark .typo a.external-link,
+.theme-dark .external-link {
+	color: #7dd3fc !important;
+}
+.theme-dark .typo a.external-link:hover,
+.theme-dark .external-link:hover {
+	color: #bae6fd !important;
+}
 
 .theme-dark .typo h1,
 .theme-dark .typo h2,
@@ -368,18 +376,18 @@
 /* ---------------- 暗色模式下引用块美化 ---------------- */
 .theme-dark .typo blockquote {
 	background: linear-gradient(135deg, #1a1d24 0%, #151821 100%) !important;
-	color: #9ca3af !important;
+	color: #cbd5e1 !important;
 	border-left-color: #42b983 !important;
-	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.55);
 }
 
 .theme-dark .typo blockquote::before {
 	color: #42b983;
-	opacity: 0.15;
+	opacity: 0.18;
 }
 
 .theme-dark .typo blockquote:hover {
-	box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 16px 32px -22px rgba(0, 0, 0, 0.65);
 }
 
 /* ---------------- 暗色模式下图片样式 ---------------- */
@@ -397,23 +405,47 @@
 	background: linear-gradient(180deg, #818cf8, #a78bfa);
 }
 
+.theme-dark .m-toc .toc-link {
+	color: #d1d5db !important;
+}
+
 .theme-dark .m-toc .toc-link:hover {
 	background: rgba(129, 140, 248, 0.1);
 	color: #a5b4fc !important;
 }
 
 /* ---------------- 暗色模式下返回顶部按钮 ---------------- */
+.theme-dark .m-backtop,
 .theme-dark .el-backtop {
 	background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
 	box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5) !important;
 }
 
+.theme-dark .m-backtop:hover,
 .theme-dark .el-backtop:hover {
-	box-shadow: 0 8px 25px rgba(124, 58, 237, 0.6) !important;
+	box-shadow: 0 10px 26px rgba(124, 58, 237, 0.55) !important;
 }
 
+.theme-dark .m-backtop img,
 .theme-dark .el-backtop img {
 	filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)) brightness(1.2);
+}
+
+/* ---------------- 动态页点赞按钮暗色适配 ---------------- */
+.theme-dark .moment .extra.content a {
+	color: #f8fafc !important;
+}
+
+.theme-dark .moment .extra.content a:hover {
+	color: #ffffff !important;
+}
+
+.theme-dark .moment .extra.content .outline.heart.icon {
+	color: #ffffff !important;
+}
+
+.theme-dark .moment .extra.content .like-color {
+	color: #ff6b8a !important;
 }
 
 /* ---------------- 暗色模式下代码块行号 ---------------- */
