@@ -17,8 +17,13 @@ import top.naccl.enums.VisitBehavior;
 import top.naccl.model.vo.PageResult;
 import top.naccl.model.vo.Result;
 import top.naccl.service.MomentService;
+import top.naccl.service.RedisService;
 import top.naccl.service.impl.UserServiceImpl;
+import top.naccl.util.IpAddressUtils;
 import top.naccl.util.JwtUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Description: 动态
@@ -31,6 +36,8 @@ public class MomentController {
 	MomentService momentService;
 	@Autowired
 	UserServiceImpl userService;
+	@Autowired
+	RedisService redisService;
 
 	/**
 	 * 分页查询动态List
@@ -42,7 +49,8 @@ public class MomentController {
 	@VisitLogger(VisitBehavior.MOMENT)
 	@GetMapping("/moments")
 	public Result moments(@RequestParam(defaultValue = "1") Integer pageNum,
-	                      @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
+	                      @RequestHeader(value = "Authorization", defaultValue = "") String jwt,
+	                      HttpServletRequest request) {
 		boolean adminIdentity = false;
 		if (JwtUtils.judgeTokenIsExist(jwt)) {
 			try {
@@ -60,7 +68,13 @@ public class MomentController {
 			}
 		}
 		PageInfo<Moment> pageInfo = new PageInfo<>(momentService.getMomentVOList(pageNum, adminIdentity));
-		PageResult<Moment> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
+		String ip = IpAddressUtils.getIpAddress(request);
+		List<Moment> moments = pageInfo.getList();
+		for (Moment moment : moments) {
+			String redisKey = ip + ":POST:/moment/like/" + moment.getId();
+			moment.setLiked(redisService.hasKey(redisKey));
+		}
+		PageResult<Moment> pageResult = new PageResult<>(pageInfo.getPages(), moments);
 		return Result.ok("获取成功", pageResult);
 	}
 

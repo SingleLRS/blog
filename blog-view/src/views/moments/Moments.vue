@@ -70,6 +70,8 @@
 					if (res.code === 200) {
 						this.momentList = res.data.list
 						this.totalPage = res.data.totalPage
+						const serverLikedIds = this.momentList.filter(item => item.liked).map(item => item.id)
+						this.likeMomentIds = Array.from(new Set([...this.likeMomentIds, ...serverLikedIds]))
 					} else {
 						this.msgError(res.msg)
 					}

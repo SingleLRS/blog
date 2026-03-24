@@ -22,4 +22,5 @@ public class Moment {
 	private Date createTime;//创建时间
 	private Integer likes;//点赞数量
 	private Boolean published;//是否公开
+	private Boolean liked;//当前访客是否已点赞
 }
