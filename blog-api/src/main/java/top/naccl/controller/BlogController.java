@@ -17,6 +17,7 @@ import top.naccl.model.vo.BlogInfo;
 import top.naccl.model.vo.PageResult;
 import top.naccl.model.vo.Result;
 import top.naccl.model.vo.SearchBlog;
+import top.naccl.model.vo.SearchBlogResult;
 import top.naccl.service.BlogService;
 import top.naccl.service.impl.UserServiceImpl;
 import top.naccl.util.JwtUtils;
@@ -119,14 +120,21 @@ public class BlogController {
 	 * @param query 关键字字符串
 	 * @return
 	 */
+	/**
+	 * 按关键字分页搜索公开且无密码保护的博客文章
+	 *
+	 * @param query   关键字字符串
+	 * @param pageNum 页码
+	 * @return
+	 */
 	@VisitLogger(VisitBehavior.SEARCH)
-	@GetMapping("/searchBlog")
-	public Result searchBlog(@RequestParam String query) {
-		//校验关键字字符串合法性
+	@GetMapping("/searchBlogs")
+	public Result searchBlogs(@RequestParam String query,
+	                          @RequestParam(defaultValue = "1") Integer pageNum) {
 		if (StringUtils.isEmpty(query) || StringUtils.hasSpecialChar(query) || query.trim().length() > 20) {
 			return Result.error("参数错误");
 		}
-		List<SearchBlog> searchBlogs = blogService.getSearchBlogListByQueryAndIsPublished(query.trim());
-		return Result.ok("获取成功", searchBlogs);
+		PageResult<SearchBlogResult> pageResult = blogService.getSearchBlogResultListByQueryAndIsPublished(query.trim(), pageNum);
+		return Result.ok("获取成功", pageResult);
 	}
 }

@@ -46,6 +46,12 @@ const routes = [
 				meta: {title: '分类'}
 			},
 			{
+				path: '/search',
+				name: 'search',
+				component: () => import('@/views/search/Search'),
+				meta: {title: '搜索'}
+			},
+			{
 				path: '/moments',
 				name: 'moments',
 				component: () => import('@/views/moments/Moments'),

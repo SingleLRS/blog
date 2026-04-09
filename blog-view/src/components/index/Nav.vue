@@ -28,8 +28,9 @@
 				<i class="info icon"></i>关于我
 			</router-link>
 			<el-autocomplete v-model="queryString" :fetch-suggestions="debounceQuery" placeholder="Search..."
+			                 :trigger-on-focus="false"
 			                 class="right item m-search" :class="{'m-mobile-hide': mobileHide}"
-			                 popper-class="m-search-item" @select="handleSelect">
+			                 popper-class="m-search-item" @select="handleSelect" @keyup.enter.native="goSearchPage">
 				<i class="search icon el-input__icon" slot="suffix"></i>
 				<template slot-scope="{ item }">
 					<div class="title">{{ item.title }}</div>
@@ -86,7 +87,6 @@
 			}
 		},
 		mounted() {
-			// 初始化主题状态（优先使用站内设置，否则跟随系统主题）
 			const savedTheme = window.localStorage.getItem('nblog.theme')
 			const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
 			this.isDark = savedTheme ? savedTheme === 'dark' : prefersDark
@@ -105,9 +105,7 @@
 				}
 				this.themeMediaQuery = mediaQuery
 			}
-			//监听页面滚动位置，改变导航栏的显示
 			window.addEventListener('scroll', () => {
-				//首页且不是移动端
 				if (this.$route.name === 'home' && this.clientSize.clientWidth > 768) {
 					if (window.scrollY > this.clientSize.clientHeight / 2) {
 						this.$refs.nav.classList.remove('transparent')
@@ -116,11 +114,8 @@
 					}
 				}
 			})
-			//监听点击事件，收起导航菜单
 			document.addEventListener('click', (e) => {
-				//遍历冒泡
 				let flag = this.$refs.nav.contains(e.target)
-				//如果导航栏是打开状态，且点击的元素不是Nav的子元素，则收起菜单
 				if (!this.mobileHide && !flag) {
 					this.mobileHide = true
 				}
@@ -149,7 +144,11 @@
 			},
 			debounceQuery(queryString, callback) {
 				this.timer && clearTimeout(this.timer)
-				this.timer = setTimeout(() => this.querySearchAsync(queryString, callback), 1000)
+				if (queryString == null || queryString.trim() === '') {
+					callback([])
+					return
+				}
+				this.timer = setTimeout(() => this.querySearchAsync(queryString, callback), 300)
 			},
 			querySearchAsync(queryString, callback) {
 				if (queryString == null
@@ -160,6 +159,7 @@
 						|| queryString.indexOf('#') !== -1
 						|| queryString.indexOf('*') !== -1
 						|| queryString.trim().length > 20) {
+					callback([])
 					return
 				}
 				getSearchBlogList(queryString).then(res => {
@@ -171,8 +171,22 @@
 						callback(this.queryResult)
 					}
 				}).catch(() => {
+					callback([])
 					this.msgError("请求失败")
 				})
+			},
+			goSearchPage() {
+				const query = this.queryString == null ? '' : this.queryString.trim()
+				if (query === ''
+						|| query.indexOf('%') !== -1
+						|| query.indexOf('_') !== -1
+						|| query.indexOf('[') !== -1
+						|| query.indexOf('#') !== -1
+						|| query.indexOf('*') !== -1
+						|| query.length > 20) {
+					return
+				}
+				this.$router.push({path: '/search', query: {query, pageNum: 1}})
 			},
 			handleSelect(item) {
 				if (item.id) {
@@ -256,27 +270,5 @@
 
 	.m-search-item {
 		min-width: 350px !important;
-	}
-
-	.m-search-item li {
-		line-height: normal !important;
-		padding: 8px 10px !important;
-	}
-
-	.m-search-item li .title {
-		text-overflow: ellipsis;
-		overflow: hidden;
-		color: rgba(0, 0, 0, 0.87);
-	}
-
-	.m-search-item li .content {
-		text-overflow: ellipsis;
-		font-size: 12px;
-		color: rgba(0, 0, 0, .70);
-	}
-
-	/* 顶栏主题切换图标尺寸与对齐 */
-	.m-theme-toggle i {
-		font-size: 16px !important;
 	}
 </style>

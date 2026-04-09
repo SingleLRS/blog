@@ -27,8 +27,20 @@ export function getSearchBlogList(query) {
 	return axios({
 		url: 'searchBlog',
 		method: 'GET',
+		showProgress: false,
 		params: {
 			query
+		}
+	})
+}
+
+export function getSearchBlogResultList(query, pageNum) {
+	return axios({
+		url: 'searchBlogs',
+		method: 'GET',
+		params: {
+			query,
+			pageNum
 		}
 	})
 }

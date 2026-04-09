@@ -10,7 +10,9 @@ const request = axios.create({
 // 请求拦截
 request.interceptors.request.use(
 	config => {
-		NProgress.start()
+		if (config.showProgress !== false) {
+			NProgress.start()
+		}
 		const identification = window.localStorage.getItem('identification')
 		//identification存在，且是基于baseURL的请求
 		if (identification && !(config.url.startsWith('http://') || config.url.startsWith('https://'))) {

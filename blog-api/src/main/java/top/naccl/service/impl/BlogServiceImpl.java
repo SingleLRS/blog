@@ -19,10 +19,12 @@ import top.naccl.model.vo.NewBlog;
 import top.naccl.model.vo.PageResult;
 import top.naccl.model.vo.RandomBlog;
 import top.naccl.model.vo.SearchBlog;
+import top.naccl.model.vo.SearchBlogResult;
 import top.naccl.service.BlogService;
 import top.naccl.service.RedisService;
 import top.naccl.service.TagService;
 import top.naccl.util.JacksonUtils;
+import top.naccl.util.StringUtils;
 import top.naccl.util.markdown.MarkdownUtils;
 
 import javax.annotation.PostConstruct;
@@ -77,18 +79,41 @@ public class BlogServiceImpl implements BlogService {
 	@Override
 	public List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query) {
 		List<SearchBlog> searchBlogs = blogMapper.getSearchBlogListByQueryAndIsPublished(query);
-		// 数据库的处理是不区分大小写的，那么这里的匹配串处理也应该不区分大小写，否则会出现不准确的结果
 		query = query.toUpperCase();
 		for (SearchBlog searchBlog : searchBlogs) {
-			String content = searchBlog.getContent().toUpperCase();
-			int contentLength = content.length();
-			int index = content.indexOf(query) - 10;
-			index = Math.max(index, 0);
-			int end = index + 21;//以关键字字符串为中心返回21个字
-			end = Math.min(end, contentLength - 1);
-			searchBlog.setContent(searchBlog.getContent().substring(index, end));
+			searchBlog.setContent(buildSnippet(searchBlog.getContent(), query, 21));
 		}
 		return searchBlogs;
+	}
+
+	@Override
+	public PageResult<SearchBlogResult> getSearchBlogResultListByQueryAndIsPublished(String query, Integer pageNum) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<SearchBlogResult> searchBlogResults = blogMapper.getSearchBlogResultListByQueryAndIsPublished(query);
+		query = query.toUpperCase();
+		for (SearchBlogResult searchBlogResult : searchBlogResults) {
+			searchBlogResult.setDescription(buildSnippet(searchBlogResult.getDescription(), query, 120));
+		}
+		PageInfo<SearchBlogResult> pageInfo = new PageInfo<>(searchBlogResults);
+		return new PageResult<>(pageInfo.getPages(), pageInfo.getList());
+	}
+
+	private String buildSnippet(String text, String query, int maxLength) {
+		if (StringUtils.isEmpty(text)) {
+			return "";
+		}
+		String upperText = text.toUpperCase();
+		int index = upperText.indexOf(query);
+		if (index < 0) {
+			return StringUtils.substring(text, 0, maxLength);
+		}
+		int half = maxLength / 2;
+		int start = Math.max(index - half, 0);
+		int end = Math.min(start + maxLength, text.length());
+		if (end - start < maxLength) {
+			start = Math.max(end - maxLength, 0);
+		}
+		return StringUtils.substring(text, start, end);
 	}
 
 	@Override

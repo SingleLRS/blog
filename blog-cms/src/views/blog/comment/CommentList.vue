@@ -29,9 +29,9 @@
 			<el-table-column label="QQ" prop="qq" width="115"></el-table-column>
 			<el-table-column label="所在页面" show-overflow-tooltip>
 				<template v-slot="scope">
-					<el-link type="success" :href="`/blog/${scope.row.blog.id}`" target="_blank" v-if="scope.row.page===0">{{ scope.row.blog.title }}</el-link>
-					<el-link type="success" :href="'/about'" target="_blank" v-else-if="scope.row.page===1">关于我</el-link>
-					<el-link type="success" :href="'/friends'" target="_blank" v-else-if="scope.row.page===2">友人帐</el-link>
+					<el-link type="success" :href="getCommentPageUrl(scope.row)" target="_blank" v-if="scope.row.page===0">{{ scope.row.blog.title }}</el-link>
+					<el-link type="success" :href="getCommentPageUrl(scope.row)" target="_blank" v-else-if="scope.row.page===1">关于我</el-link>
+					<el-link type="success" :href="getCommentPageUrl(scope.row)" target="_blank" v-else-if="scope.row.page===2">友人帐</el-link>
 				</template>
 			</el-table-column>
 			<el-table-column label="发表时间" width="170">
@@ -153,6 +153,19 @@
 					this.commentList = res.data.list
 					this.total = res.data.total
 				})
+			},
+			getCommentPageUrl(comment) {
+				const viewBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : 'https://liuruis.cn'
+				if (comment.page === 0 && comment.blog) {
+					return `${viewBaseUrl}/blog/${comment.blog.id}`
+				}
+				if (comment.page === 1) {
+					return `${viewBaseUrl}/about`
+				}
+				if (comment.page === 2) {
+					return `${viewBaseUrl}/friends`
+				}
+				return viewBaseUrl
 			},
 			getBlogList() {
 				getBlogList().then(res => {

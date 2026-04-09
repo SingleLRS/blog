@@ -8,6 +8,7 @@ import top.naccl.model.vo.NewBlog;
 import top.naccl.model.vo.PageResult;
 import top.naccl.model.vo.RandomBlog;
 import top.naccl.model.vo.SearchBlog;
+import top.naccl.model.vo.SearchBlogResult;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ public interface BlogService {
 	List<Blog> getListByTitleAndCategoryId(String title, Integer categoryId);
 
 	List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
+
+	PageResult<SearchBlogResult> getSearchBlogResultListByQueryAndIsPublished(String query, Integer pageNum);
 
 	List<Blog> getIdAndTitleList();
 

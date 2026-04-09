@@ -12,6 +12,7 @@ import top.naccl.model.vo.CategoryBlogCount;
 import top.naccl.model.vo.NewBlog;
 import top.naccl.model.vo.RandomBlog;
 import top.naccl.model.vo.SearchBlog;
+import top.naccl.model.vo.SearchBlogResult;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public interface BlogMapper {
 	List<Blog> getListByTitleAndCategoryId(String title, Integer categoryId);
 
 	List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
+
+	List<SearchBlogResult> getSearchBlogResultListByQueryAndIsPublished(String query);
 
 	List<Blog> getIdAndTitleList();
 

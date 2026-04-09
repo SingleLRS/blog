@@ -63,12 +63,47 @@
         <result property="content" column="content"/>
     </resultMap>
 
-    <!--按关键字根据文章内容搜索公开且无密码保护的博客文章-->
+    <resultMap id="searchBlogResult" type="top.naccl.model.vo.SearchBlogResult">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="createTime" column="create_time"/>
+        <result property="categoryName" column="category_name"/>
+    </resultMap>
+
+    <!--按关键字根据文章标题、描述、内容搜索公开且无密码保护的博客文章，用于联想建议-->
     <select id="getSearchBlogListByQueryAndIsPublished" resultMap="searchBlog">
         <bind name="queryPattern" value="'%' + query + '%'"/>
-        select id, title, content
+        select id, title,
+        case
+            when title like #{queryPattern} then title
+            when description like #{queryPattern} then description
+            else content
+        end as content
         from blog
-        where is_published=true and password='' and content like #{queryPattern}
+        where is_published=true
+          and password=''
+          and (title like #{queryPattern} or description like #{queryPattern} or content like #{queryPattern})
+        order by case
+            when title like #{queryPattern} then 1
+            when description like #{queryPattern} then 2
+            else 3
+        end, create_time desc
+    </select>
+
+    <!--按关键字根据文章标题、描述、内容搜索公开且无密码保护的博客文章，用于结果页-->
+    <select id="getSearchBlogResultListByQueryAndIsPublished" resultMap="searchBlogResult">
+        <bind name="queryPattern" value="'%' + query + '%'"/>
+        select b.id, b.title, b.description, b.create_time, c.category_name
+        from blog as b left join category as c on b.category_id=c.id
+        where b.is_published=true
+          and b.password=''
+          and (b.title like #{queryPattern} or b.description like #{queryPattern} or b.content like #{queryPattern})
+        order by case
+            when b.title like #{queryPattern} then 1
+            when b.description like #{queryPattern} then 2
+            else 3
+        end, b.create_time desc
     </select>
 
     <resultMap id="blogIdAndTitle" type="top.naccl.model.vo.BlogIdAndTitle">

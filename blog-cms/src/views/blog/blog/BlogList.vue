@@ -39,8 +39,9 @@
 			<el-table-column label="最近更新" width="170">
 				<template v-slot="scope">{{ scope.row.updateTime | dateFormat }}</template>
 			</el-table-column>
-			<el-table-column label="操作" width="200">
+			<el-table-column label="操作" width="280">
 				<template v-slot="scope">
+					<el-button type="success" icon="el-icon-view" size="mini" @click="goBlogViewPage(scope.row.id)">查看</el-button>
 					<el-button type="primary" icon="el-icon-edit" size="mini" @click="goBlogEditPage(scope.row.id)">编辑</el-button>
 					<el-popconfirm title="确定删除吗？" icon="el-icon-delete" iconColor="red" @onConfirm="deleteBlogById(scope.row.id)">
 						<el-button size="mini" type="danger" icon="el-icon-delete" slot="reference">删除</el-button>
@@ -203,6 +204,10 @@
 			},
 			goBlogEditPage(id) {
 				this.$router.push(`/blog/edit/${id}`)
+			},
+			goBlogViewPage(id) {
+				const viewBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : 'https://liuruis.cn'
+				window.open(`${viewBaseUrl}/blog/${id}`, '_blank')
 			},
 			deleteBlogById(id) {
 				this.$confirm('此操作将永久删除该博客<strong style="color: red">及其所有评论</strong>，是否删除?<br>建议将博客置为<strong style="color: red">私密</strong>状态！', '提示', {
