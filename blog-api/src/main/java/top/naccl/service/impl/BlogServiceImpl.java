@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * @Description: 博客文章业务层实现
@@ -56,6 +57,8 @@ public class BlogServiceImpl implements BlogService {
 	private static final String orderBy = "is_top desc, create_time desc";
 	//私密博客提示
 	private static final String PRIVATE_BLOG_DESCRIPTION = "此文章受密码保护！";
+	private static final Pattern MARKDOWN_IMAGE_PATTERN = Pattern.compile("!\\[[^\\]]*\\]\\([^)]*\\)");
+	private static final Pattern MARKDOWN_LINK_PATTERN = Pattern.compile("\\[([^\\]]+)\\]\\([^)]*\\)");
 
 	/**
 	 * 项目启动时，保存所有博客的浏览量到Redis
@@ -92,7 +95,8 @@ public class BlogServiceImpl implements BlogService {
 		List<SearchBlogResult> searchBlogResults = blogMapper.getSearchBlogResultListByQueryAndIsPublished(query);
 		query = query.toUpperCase();
 		for (SearchBlogResult searchBlogResult : searchBlogResults) {
-			searchBlogResult.setDescription(buildSnippet(searchBlogResult.getDescription(), query, 120));
+			searchBlogResult.setDescription(buildSnippet(toSearchableText(searchBlogResult.getDescription()), query, 120));
+			searchBlogResult.setContent(buildSnippet(toSearchableText(searchBlogResult.getContent()), query, 120));
 		}
 		PageInfo<SearchBlogResult> pageInfo = new PageInfo<>(searchBlogResults);
 		return new PageResult<>(pageInfo.getPages(), pageInfo.getList());
@@ -114,6 +118,17 @@ public class BlogServiceImpl implements BlogService {
 			start = Math.max(end - maxLength, 0);
 		}
 		return StringUtils.substring(text, start, end);
+	}
+
+	private String toSearchableText(String text) {
+		if (StringUtils.isEmpty(text)) {
+			return "";
+		}
+		String plainText = MARKDOWN_IMAGE_PATTERN.matcher(text).replaceAll(" ");
+		plainText = MARKDOWN_LINK_PATTERN.matcher(plainText).replaceAll("$1");
+		plainText = plainText.replaceAll("[#>*_~-]+", " ");
+		plainText = plainText.replaceAll("\\s+", " ").trim();
+		return plainText;
 	}
 
 	@Override

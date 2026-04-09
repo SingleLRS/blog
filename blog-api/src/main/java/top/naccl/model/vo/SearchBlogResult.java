@@ -20,6 +20,7 @@ public class SearchBlogResult {
 	private Long id;
 	private String title;
 	private String description;
+	private String content;
 	private Date createTime;
 	private String categoryName;
 }

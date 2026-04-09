@@ -33,11 +33,12 @@
 			                 popper-class="m-search-item" @select="handleSelect" @keyup.enter.native="goSearchPage">
 				<i class="search icon el-input__icon" slot="suffix"></i>
 				<template slot-scope="{ item }">
-					<div class="title">{{ item.title }}</div>
-					<span class="content">{{ item.content }}</span>
+					<div class="m-search-option">
+						<div class="title" v-html="formatSearchPreview(item, 'title')"></div>
+						<span class="content" v-html="formatSearchPreview(item, 'content')"></span>
+					</div>
 				</template>
 			</el-autocomplete>
-			<!-- 主题切换：右上角按钮，仅桌面端显示 -->
 			<el-tooltip :content="isDark ? '切换为明亮模式' : '切换为暗黑模式'" placement="bottom">
 				<a class="right item m-mobile-hide m-theme-toggle" @click.prevent="toggleTheme">
 					<i :class="isDark ? 'sun outline icon' : 'moon icon'"></i>
@@ -51,7 +52,7 @@
 </template>
 
 <script>
-	import {getSearchBlogList} from "@/api/blog";
+	import {getSearchBlogResultList} from "@/api/blog";
 	import {mapState} from 'vuex'
 
 	export default {
@@ -70,7 +71,6 @@
 			return {
 				mobileHide: true,
 				queryString: '',
-				queryResult: [],
 				timer: null,
 				isDark: false,
 				handleSystemThemeChange: null,
@@ -81,7 +81,6 @@
 			...mapState(['clientSize'])
 		},
 		watch: {
-			//路由改变时，收起导航栏
 			'$route.path'() {
 				this.mobileHide = true
 			}
@@ -162,13 +161,10 @@
 					callback([])
 					return
 				}
-				getSearchBlogList(queryString).then(res => {
+				getSearchBlogResultList(queryString, 1, false).then(res => {
 					if (res.code === 200) {
-						this.queryResult = res.data
-						if (this.queryResult.length === 0) {
-							this.queryResult.push({title: '无相关搜索结果'})
-						}
-						callback(this.queryResult)
+						const list = ((res.data && res.data.list) || []).slice(0, 10)
+						callback(list.length ? list : [{title: '无相关搜索结果', content: '', description: ''}])
 					}
 				}).catch(() => {
 					callback([])
@@ -192,6 +188,64 @@
 				if (item.id) {
 					this.$router.push(`/blog/${item.id}`)
 				}
+			},
+			escapeHtml(text) {
+				return String(text == null ? '' : text)
+					.replace(/&/g, '&amp;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;')
+					.replace(/"/g, '&quot;')
+					.replace(/'/g, '&#39;')
+			},
+			escapeRegExp(text) {
+				return String(text == null ? '' : text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+			},
+			getSearchPreviewText(text, query, maxLength = 80) {
+				const source = String(text == null ? '' : text).replace(/\s+/g, ' ').trim()
+				if (!source) {
+					return ''
+				}
+				const normalizedQuery = String(query == null ? '' : query).trim()
+				if (!normalizedQuery) {
+					return source.length > maxLength ? `${source.slice(0, maxLength)}...` : source
+				}
+				const index = source.toLowerCase().indexOf(normalizedQuery.toLowerCase())
+				if (index === -1) {
+					return source.length > maxLength ? `${source.slice(0, maxLength)}...` : source
+				}
+				const queryLength = normalizedQuery.length
+				const half = Math.floor((maxLength - queryLength) / 2)
+				const start = Math.max(index - half, 0)
+				const end = Math.min(source.length, start + maxLength)
+				const adjustedStart = Math.max(0, end - maxLength)
+				const prefix = adjustedStart > 0 ? '...' : ''
+				const suffix = end < source.length ? '...' : ''
+				return `${prefix}${source.slice(adjustedStart, end)}${suffix}`
+			},
+			highlightSearchText(text) {
+				const safeText = this.escapeHtml(text)
+				const query = (this.queryString || '').trim()
+				if (!query) {
+					return safeText
+				}
+				const pattern = new RegExp(`(${this.escapeRegExp(query)})`, 'ig')
+				return safeText.replace(pattern, '<mark class="m-search-highlight">$1</mark>')
+			},
+			formatSearchPreview(item, field) {
+				if (!item || item.title === '无相关搜索结果') {
+					return field === 'title' ? this.escapeHtml(item && item.title ? item.title : '') : ''
+				}
+				const query = (this.queryString || '').trim()
+				if (field === 'title') {
+					return this.highlightSearchText(this.getSearchPreviewText(item.title, query, 36))
+				}
+				const descriptionPreview = this.getSearchPreviewText(item.description || '', query, 88)
+				const contentPreview = this.getSearchPreviewText(item.content || '', query, 88)
+				const normalizedQuery = query.toLowerCase()
+				const descriptionMatched = normalizedQuery && descriptionPreview.toLowerCase().includes(normalizedQuery)
+				const contentMatched = normalizedQuery && contentPreview.toLowerCase().includes(normalizedQuery)
+				const previewText = descriptionMatched || !contentMatched ? descriptionPreview : contentPreview
+				return this.highlightSearchText(previewText)
 			}
 		}
 	}
@@ -258,7 +312,7 @@
 	}
 
 	.m-search input {
-		color: rgba(255, 255, 255, .9);;
+		color: rgba(255, 255, 255, .9);
 		border: 0px !important;
 		background-color: inherit;
 		padding: .67857143em 2.1em .67857143em 1em;
@@ -270,5 +324,78 @@
 
 	.m-search-item {
 		min-width: 350px !important;
+		background: #1f2937 !important;
+		border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	}
+
+	.m-search-item .m-search-option {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		padding: 4px 0;
+	}
+
+	.m-search-item li {
+		padding: 10px 14px !important;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+		background: transparent !important;
+	}
+
+	.m-search-item li:last-child {
+		border-bottom: 0;
+	}
+
+	.m-search-item li:hover {
+		background: rgba(255, 255, 255, 0.06) !important;
+	}
+
+	.m-search-item .title {
+		font-size: 14px;
+		font-weight: 600;
+		line-height: 1.4;
+		color: rgba(255, 255, 255, 0.95);
+	}
+
+	.m-search-item .content {
+		display: block;
+		font-size: 12px;
+		line-height: 1.6;
+		color: rgba(255, 255, 255, 0.7);
+		white-space: normal;
+		word-break: break-all;
+	}
+
+	.m-search-highlight {
+		padding: 0;
+		background: rgba(168, 85, 247, 0.3);
+		color: #f5edff;
+		border-radius: 2px;
+	}
+
+	:root:not(.theme-dark) .m-search-item {
+		background: #ffffff !important;
+		border: 1px solid rgba(15, 23, 42, 0.08) !important;
+		box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+	}
+
+	:root:not(.theme-dark) .m-search-item li {
+		border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+	}
+
+	:root:not(.theme-dark) .m-search-item li:hover {
+		background: rgba(59, 130, 246, 0.06) !important;
+	}
+
+	:root:not(.theme-dark) .m-search-item .title {
+		color: #111827;
+	}
+
+	:root:not(.theme-dark) .m-search-item .content {
+		color: #6b7280;
+	}
+
+	:root:not(.theme-dark) .m-search-highlight {
+		background: rgba(250, 204, 21, 0.45);
+		color: #111827;
 	}
 </style>

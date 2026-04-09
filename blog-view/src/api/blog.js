@@ -23,24 +23,11 @@ export function checkBlogPassword(blogPasswordForm) {
 	})
 }
 
-export function getSearchBlogList(query) {
-	return axios({
-		url: 'searchBlog',
-		method: 'GET',
-		showProgress: false,
-		params: {
-			query
-		}
-	})
-}
-
-export function getSearchBlogResultList(query, pageNum) {
+export function getSearchBlogResultList(query, pageNum = 1, showProgress = true) {
 	return axios({
 		url: 'searchBlogs',
 		method: 'GET',
-		params: {
-			query,
-			pageNum
-		}
+		showProgress,
+		params: pageNum === 1 ? {query} : {query, pageNum}
 	})
 }

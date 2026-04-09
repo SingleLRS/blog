@@ -67,6 +67,7 @@
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="description" column="description"/>
+        <result property="content" column="content"/>
         <result property="createTime" column="create_time"/>
         <result property="categoryName" column="category_name"/>
     </resultMap>
@@ -94,7 +95,7 @@
     <!--按关键字根据文章标题、描述、内容搜索公开且无密码保护的博客文章，用于结果页-->
     <select id="getSearchBlogResultListByQueryAndIsPublished" resultMap="searchBlogResult">
         <bind name="queryPattern" value="'%' + query + '%'"/>
-        select b.id, b.title, b.description, b.create_time, c.category_name
+        select b.id, b.title, b.description, b.content, b.create_time, c.category_name
         from blog as b left join category as c on b.category_id=c.id
         where b.is_published=true
           and b.password=''
