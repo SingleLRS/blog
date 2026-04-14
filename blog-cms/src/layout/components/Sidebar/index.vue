@@ -12,6 +12,8 @@
 					:active-text-color="variables.menuActiveText"
 					:collapse-transition="false"
 					mode="vertical"
+					@open="handleOpen"
+					@close="handleClose"
 			>
 				<sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path"/>
 			</el-menu>
@@ -25,12 +27,13 @@
 	import SidebarItem from './SidebarItem'
 	import variables from '@/assets/styles/variables.scss'
 
+	const SIDEBAR_OPENEDS_KEY = 'cms_sidebar_openeds'
+
 	export default {
 		components: {SidebarItem, Logo},
 		data() {
 			return {
-				//展开所有父级菜单
-				defaultOpeneds: this.$store.state.settings.defaultOpeneds
+				defaultOpeneds: this.getSavedOpeneds()
 			}
 		},
 		computed: {
@@ -43,7 +46,6 @@
 			activeMenu() {
 				const route = this.$route
 				const {meta, path} = route
-				// if set path, the sidebar will highlight the path you set
 				if (meta.activeMenu) {
 					return meta.activeMenu
 				}
@@ -57,6 +59,33 @@
 			},
 			isCollapse() {
 				return !this.sidebar.opened
+			}
+		},
+		methods: {
+			getSavedOpeneds() {
+				const savedOpeneds = window.localStorage.getItem(SIDEBAR_OPENEDS_KEY)
+				if (!savedOpeneds) {
+					return []
+				}
+				try {
+					const parsedOpeneds = JSON.parse(savedOpeneds)
+					return Array.isArray(parsedOpeneds) ? parsedOpeneds : []
+				} catch (e) {
+					return []
+				}
+			},
+			saveOpeneds(openeds) {
+				window.localStorage.setItem(SIDEBAR_OPENEDS_KEY, JSON.stringify(openeds))
+			},
+			handleOpen(index) {
+				if (!this.defaultOpeneds.includes(index)) {
+					this.defaultOpeneds.push(index)
+					this.saveOpeneds(this.defaultOpeneds)
+				}
+			},
+			handleClose(index) {
+				this.defaultOpeneds = this.defaultOpeneds.filter(item => item !== index)
+				this.saveOpeneds(this.defaultOpeneds)
 			}
 		}
 	}
