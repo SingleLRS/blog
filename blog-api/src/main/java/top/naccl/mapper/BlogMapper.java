@@ -15,6 +15,7 @@ import top.naccl.model.vo.SearchBlog;
 import top.naccl.model.vo.SearchBlogResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: 博客文章持久层接口
@@ -87,4 +88,6 @@ public interface BlogMapper {
 	Boolean getPublishedByBlogId(Long blogId);
 
 	List<CategoryBlogCount> getCategoryBlogCountList();
+
+	List<Map<String, Object>> getSitemapBlogList();
 }

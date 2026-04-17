@@ -357,4 +357,11 @@
     <select id="getCategoryBlogCountList" resultMap="categoryBlogCount">
         select category_id, count(category_id) as blog_count from blog group by category_id
     </select>
+
+    <!--查询所有已公开且无密码保护的博客，供Sitemap使用-->
+    <select id="getSitemapBlogList" resultType="java.util.Map">
+        select id, DATE_FORMAT(update_time, '%Y-%m-%d') as lastmod
+        from blog where is_published = true and (password is null or password = '')
+        order by update_time desc
+    </select>
 </mapper>
